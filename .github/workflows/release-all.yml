@@ -1,0 +1,42 @@
+name: release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version'
+        required: true
+
+jobs:
+  cluster:
+    uses: ckotzbauer/home-cluster-images/.github/workflows/reusable-release.yml@main
+    with:
+      version: ${{ github.event.inputs.version }}
+      platforms: linux/amd64,linux/arm64
+      image: cluster
+      folder: cluster
+    secrets:
+      REPO_ACCESS: ${{ secrets.REPO_ACCESS }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+  web-red:
+    uses: ckotzbauer/home-cluster-images/.github/workflows/reusable-release.yml@main
+    with:
+      version: ${{ github.event.inputs.version }}
+      platforms: linux/amd64,linux/arm64
+      image: web-red
+      folder: web-red
+    secrets:
+      REPO_ACCESS: ${{ secrets.REPO_ACCESS }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+  web-green:
+    uses: ckotzbauer/home-cluster-images/.github/workflows/reusable-release.yml@main
+    with:
+      version: ${{ github.event.inputs.version }}
+      platforms: linux/amd64,linux/arm64
+      image: web-green
+      folder: web-green
+    secrets:
+      REPO_ACCESS: ${{ secrets.REPO_ACCESS }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}

@@ -1,0 +1,44 @@
+name: build
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        module:
+          - cluster
+          - web-red
+          - web-green
+    steps:
+    - uses: actions/checkout@v3
+    - uses: dorny/paths-filter@v2.11.1
+      id: changes
+      with:
+        filters: |
+          src:
+            - "${{ matrix.module }}/**"
+
+    - name: Set up QEMU
+      if: steps.changes.outputs.src == 'true'
+      uses: docker/setup-qemu-action@v2
+
+    - name: Set up Docker Buildx
+      if: steps.changes.outputs.src == 'true'
+      uses: docker/setup-buildx-action@v2
+
+    - name: Build image
+      if: steps.changes.outputs.src == 'true'
+      uses: docker/build-push-action@v4
+      with:
+        context: ${{ matrix.module }}
+        push: false
+        platforms: linux/amd64
+        load: true
+        tags: |
+          ghcr.io/ckotzbauer/kubernetes-showcase/${{ matrix.module }}
