@@ -27,7 +27,7 @@ jobs:
     - name: Build image
       uses: docker/build-push-action@v4
       with:
-        context: ${{ matrix.module }}
+        context: src/${{ matrix.module }}
         push: false
         platforms: linux/amd64
         load: true
