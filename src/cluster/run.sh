@@ -5,5 +5,5 @@ docker run \
     --name nw-cluster-cli \
     --rm \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    kubernetes \
+    ghcr.io/ckotzbauer/kubernetes-showcase/cluster:latest \
     bash
